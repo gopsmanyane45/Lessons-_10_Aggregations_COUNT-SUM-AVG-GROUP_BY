@@ -50,64 +50,80 @@ SELECT COUNT (*) AS Total_Properties, PROVINCE FROM [property24].[dbo].[property
 SELECT COUNT (FLOOR_SIZE) AS Total_Properties, PROVINCE FROM [property24].[dbo].[property24 CSV] WHERE FLOOR_SIZE  > 200 GROUP BY  PROVINCE
 
 
--- 10. How many distinct provinces are in the table?
-SELECT COUNT (DISTINCT (PROVINCE) AS D_Provinces  FROM [property24].[dbo].[property24 CSV]  GROUP BY  PROVINCE
+-- 10. How many distinct provinces are in the table? 9
+SELECT COUNT (DISTINCT (PROVINCE)) , PROVINCE
+FROM [property24].[dbo].[property24 CSV] 
+GROUP BY  PROVINCE
 
 
 -- SECTION 2 – SUM Aggregations (10 Questions)
 
-SELECT SUM    FROM [property24].[dbo].[property24 CSV] GROUP BY PROPERTY_ID
 
 
 -- 11. What is the total value of all
-SELECT SUM(PROPERTY_PRICE) AS TOTAL_VALUE  FROM [property24].[dbo].[property24 CSV];
+
 SELECT SUM(PROPERTY_PRICE) AS TOTAL_VALUE  FROM [property24].[dbo].[property24 CSV] 
 
--- 12. What is the total property value per province?
+SELECT SUM(CAST(BEDROOMS AS BIGINT)) AS #BEDROOM
+FROM [property24].[dbo].[property24 CSV] WHERE BEDROOMS > 2
 
+-- 12. What is the total property value per province?
 SELECT  PROVINCE,
-SUM(PROPERTY_ID) AS Total_Properties 
+SUM(CAST(PROPERTY_PRICE AS BIGINT)) AS TOTAL_VALUE 
 FROM [property24].[dbo].[property24 CSV]
 GROUP BY PROVINCE
 
--- 13. What is the total property value per city?
 
-SELECT SUM (*) AS CITY FROM [property24].[dbo].[property24 CSV] GROUP BY  CITY
+SELECT SUM(PROPERTY_PRICE) AS Total_Property_Value 
+FROM [property24].[dbo].[property24 CSV]
+
+
+SELECT SUM(BATHROOMS) AS Total_Properties 
+FROM [property24].[dbo].[property24 CSV]
+
+
+SELECT SUM(BATHROOMS)
+FROM [property24].[dbo].[property24 CSV]
+
+
+
+-- 13. What is the total property value per city?
+SELECT CITY, SUM (Monthly_Repayment) AS TOTAL_Mothly_Repayment FROM [property24].[dbo].[property24 CSV] GROUP BY  CITY
 
 -- 14. What is the total monthly repayment for all properties?
-SELECT SUM (*) AS TOTAL_Mothly_Repayment FROM [property24].[dbo].[property24 CSV] GROUP BY  Monthly_Repayment
+SELECT SUM (Monthly_Repayment) AS TOTAL_Mothly_Repayment FROM [property24].[dbo].[property24 CSV] GROUP BY  Monthly_Repayment
 
 -- 15. What is the total monthly repayment per province?
-SELECT SUM (*) AS Per_Provinces, PROVINCE FROM [property24].[dbo].[property24 CSV] GROUP BY  PROVINCE
+SELECT PROVINCE,  SUM (Monthly_Repayment)  AS TOTAL_Mothly_Repayment FROM [property24].[dbo].[property24 CSV] GROUP BY  PROVINCE
 
 -- 16. What is the total once-off cost for all properties?
-SELECT SUM (*) AS Total_Once_OFF FROM [property24].[dbo].[property24 CSV] GROUP BY  Total_Once_off_Costs
+SELECT SUM(CAST(Total_Once_off_Costs AS BIGINT)) AS Total_Once_OFF FROM [property24].[dbo].[property24 CSV] 199998471212
 
 -- 17. What is the total once-off cost per province?
-SELECT SUM (*) AS D_Provinces, PROVINCE FROM [property24].[dbo].[property24 CSV] GROUP BY  Total_Once_off_Costs
+SELECT PROVINCE,  SUM (Monthly_Repayment)  AS TOTAL_Mothly_Repayment FROM [property24].[dbo].[property24 CSV] GROUP BY  PROVINCE
 
 
 -- 18. What is the total property value for Gauteng?
-SELECT SUM (*) AS Total_Once_OFF, PROVINCE FROM [property24].[dbo].[property24 CSV] WHERE PROVINCE = 'Gauteng'
+SELECT PROVINCE, SUM(CAST(PROPERTY_PRICE AS BIGINT)) AS Total_value  FROM [property24].[dbo].[property24 CSV] WHERE PROVINCE = 'Gauteng'
 
 -- 19. What is the total property value for properties priced above R4,000,000?
-SELECT SUM (*) AS D_Provinces, PROVINCE FROM [property24].[dbo].[property24 CSV] WHERE PROVINCE = ' Gauteng'
+SELECT SUM(CAST(PROPERTY_PRICE AS BIGINT)) AS TOTAL_Value  FROM [property24].[dbo].[property24 CSV] WHERE PROPERTY_PRICE >= 4000000 //558857
 
 
 -- 20. What is the total minimum gross monthly income required per province?
-SELECT MIN (Min_Gross_Monthly_Income) AS Total_Min_Gross, Min_Gross_Monthly_Income FROM [property24].[dbo].[property24 CSV] GROUP BY  Min_Gross_Monthly_Income
+SELECT PROVINCE,  MIN (Min_Gross_Monthly_Income) AS Total_Min_Gross FROM [property24].[dbo].[property24 CSV] GROUP BY PROVINCE
 
 
 -- SECTION 3 – AVG Aggregations (10 Questions)
 
 
 -- 21. What is the average property price overall?
-SELECT AVG(PROPERTY_PRICE) AS TOTAL_VALUE  FROM [property24].[dbo].[property24 CSV] WHERE CITY = 'Sea Point'
-
+SELECT AVG(CAST(BEDROOMS AS BIGINT)) AS Property_Price  FROM [property24].[dbo].[property24 CSV] 
 
 SELECT AVG(PROPERTY_PRICE) AS TOTAL_VALUE  FROM [property24].[dbo].[property24 CSV] 
 
 -- 22. What is the average property price per province?
+SELECT PROVINCE, AVG(PROPERTY_PRICE) AS AVG_Property_Price FROM [property24].[dbo].[property24 CSV] GROUP BY PROVINCE
 
 SELECT  PROVINCE,
 AVG(PROVINCE) AS Total_Properties 
@@ -115,20 +131,41 @@ FROM [property24].[dbo].[property24 CSV]
 GROUP BY PROVINCE
 
 -- 23. What is the average property price per city?
-SELECT AVG(CITY) AS Total_CITY  FROM [property24].[dbo].[property24 CSV] GROUP BY CITY
+SELECT AVG(PROPERTY_PRICE) AS Total_CITY, CITY  FROM [property24].[dbo].[property24 CSV] GROUP BY CITY
 
 
 -- 24. What is the average number of bedrooms per province?
+SELECT AVG(BEDROOMS)  AS AVE_BEDROOMS, PROVINCE  FROM [property24].[dbo].[property24 CSV] GROUP BY PROVINCE
+
+
 -- 25. What is the average number of bathrooms per province?
--- 26. What is the average floor size per province?
--- 27. What is the average monthly repayment per province?
+SELECT AVG(BATHROOMS)  AS AVE_BATHROOMS, PROVINCE  FROM [property24].[dbo].[property24 CSV] GROUP BY PROVINCE
+
+
+-- 26. What is the average floor size per province?150 nw 149 nc 
+SELECT AVG(FLOOR_SIZE) AS AVE_FLOOR_SIZE, PROVINCE  FROM [property24].[dbo].[property24 CSV] GROUP BY PROVINCE
+
+-- 27. What is the average monthly repayment per province? 30538
+SELECT AVG(Monthly_Repayment) AS AVE_FLOOR_SIZE, PROVINCE  FROM [property24].[dbo].[property24 CSV] GROUP BY PROVINCE
+
 -- 28. What is the average once-off cost per province?
+SELECT AVG(Total_Once_off_Costs) AS AVE_ONCE_Off_Cost, PROVINCE  FROM [property24].[dbo].[property24 CSV] GROUP BY PROVINCE
+
 -- 29. What is the average minimum gross monthly income per province?
+SELECT AVG(Min_Gross_Monthly_Income) AS AVE_Min_Monthly_Income, PROVINCE  FROM [property24].[dbo].[property24 CSV] GROUP BY PROVINCE
+
 -- 30. What is the average property price for properties above R3,000,000?
+SELECT AVG(PROPERTY_PRICE) AS AVE_Property_Price FROM [property24].[dbo].[property24 CSV] WHERE PROPERTY_PRICE > 3000000
+SELECT AVG(PROPERTY_PRICE) AS AVG_Properties FROM [property24].[dbo].[property24 CSV] WHERE PROPERTY_PRICE >=  3000000
 
 -- SECTION 4 – GROUP BY + Filtering (10 Questions)
 -- 31. Which province has the highest average property price?
+
+
 -- 32. Which province has the lowest average property price?
+
+SELECT 
+
 -- 33. Which city has the highest total property value?
 -- 34. Which city has the lowest average property price?
 -- 35. How many properties per province are priced above R2,000,000?
